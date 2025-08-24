@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Ảnh & Lấy Link</title>
+    <style>
+      :root {
+        --bg: #0f172a; /* slate-900 */
+        --panel: #111827; /* gray-900 */
+        --muted: #94a3b8; /* slate-400 */
+        --text: #e5e7eb; /* gray-200 */
+        --primary: #22d3ee; /* cyan-400 */
+        --accent: #a78bfa; /* violet-400 */
+        --danger: #fb7185; /* rose-400 */
+        --ok: #34d399; /* emerald-400 */
+        --warn: #fbbf24; /* amber-400 */
+        --radius: 18px;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(
+            1200px 500px at 80% -10%,
+            #1f2937,
+            transparent
+          ),
+          radial-gradient(1000px 600px at -10% 10%, #1f2937, transparent),
+          var(--bg);
+        color: var(--text);
+        font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+          Cantarell, "Helvetica Neue", Arial;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px;
+      }
+      .app {
+        width: clamp(320px, 92vw, 960px);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      header {
+        padding: 20px 22px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(0, 0, 0, 0.25);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      header .logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3);
+      }
+      header h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+        padding: 20px;
+      }
+      @media (max-width: 900px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel {
+        background: rgba(17, 24, 39, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 16px;
+      }
+      .panel h2 {
+        margin: 0 0 10px;
+        font-size: 16px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+
+      .dropzone {
+        border: 2px dashed rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        transition: 0.2s ease;
+        display: grid;
+        gap: 10px;
+        place-items: center;
+        min-height: 180px;
+        cursor: pointer;
+        background: rgba(2, 6, 23, 0.4);
+      }
+      .dropzone.hover {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.2) inset;
+      }
+      .dropzone input {
+        display: none;
+      }
+
+      .preview {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .card {
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.25);
+      }
+      .card img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
+      }
+      .card .meta {
+        padding: 8px 10px;
+        font-size: 12px;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      button,
+      .btn {
+        appearance: none;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.06);
+        padding: 10px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        transition: 0.15s ease;
+      }
+      button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), #0891b2);
+        border: none;
+      }
+      .btn-accent {
+        background: linear-gradient(135deg, var(--accent), #7c3aed);
+        border: none;
+      }
+      .btn-ok {
+        background: linear-gradient(135deg, var(--ok), #059669);
+        border: none;
+      }
+      .btn-danger {
+        background: linear-gradient(135deg, var(--danger), #e11d48);
+        border: none;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      .field label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .field input {
+        width: 100%;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: var(--text);
+      }
+
+      .output {
+        display: grid;
+        gap: 10px;
+      }
+      .output textarea {
+        width: 100%;
+        min-height: 90px;
+        resize: vertical;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: var(--text);
+        padding: 10px;
+      }
+
+      .status {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .badge {
+        display: inline-grid;
+        place-items: center;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0b1220;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.4rem;
+        border-radius: 6px;
+      }
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .hint {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .list {
+        margin: 6px 0 0 14px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header>
+        <div class="logo">📤</div>
+        <div>
+          <h1>Upload Ảnh & Lấy Link</h1>
+          <p>
+            Hỗ trợ: kéo thả, chọn file, dán từ clipboard, link tạm (blob:),
+            Imgur, Cloudinary.
+          </p>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- LEFT: UPLOAD & PREVIEW -->
+        <section class="panel">
+          <h2>1) Chọn ảnh</h2>
+          <div class="dropzone" id="dropzone">
+            <input type="file" id="fileInput" accept="image/*" multiple />
+            <div>
+              <div style="font-size: 18px; font-weight: 700">
+                Kéo & thả ảnh vào đây
+              </div>
+              <div class="muted">
+                hoặc bấm để chọn • cũng hỗ trợ
+                <span class="kbd">Ctrl/⌘+V</span> để dán ảnh
+              </div>
+            </div>
+          </div>
+          <div class="preview" id="preview"></div>
+
+          <div class="actions">
+            <button class="btn-primary" id="btnTemp">
+              Tạo link tạm (blob:)
+            </button>
+            <button class="btn-accent" id="btnImgur">Upload lên Imgur</button>
+            <button class="btn-ok" id="btnCloudinary">
+              Upload lên Cloudinary
+            </button>
+            <button id="btnClear" class="btn">Xoá danh sách</button>
+          </div>
+          <div class="hint">
+            Lưu ý: Link <b>blob:</b> chỉ dùng tạm trong trình duyệt hiện tại và
+            không chia sẻ được cho người khác. Để có link công khai, dùng Imgur
+            hoặc Cloudinary bên phải.
+          </div>
+        </section>
+
+        <!-- RIGHT: CONFIG & OUTPUT -->
+        <section class="panel">
+          <h2>2) Cấu hình dịch vụ & Kết quả</h2>
+          <div class="row">
+            <div class="field">
+              <label>Imgur Client-ID (tùy chọn)</label>
+              <input
+                id="imgurClientId"
+                placeholder="Ví dụ: 123abc456def… (yêu cầu tạo app Imgur)"
+              />
+            </div>
+            <div class="field">
+              <label>Cloudinary Cloud Name</label>
+              <input id="cldName" placeholder="ví dụ: your_cloud_name" />
+            </div>
+          </div>
+          <div class="row" style="margin-top: 10px">
+            <div class="field">
+              <label>Cloudinary Unsigned Upload Preset</label>
+              <input id="cldPreset" placeholder="ví dụ: unsigned_preset" />
+            </div>
+            <div class="field">
+              <label>Thư mục (Cloudinary, tuỳ chọn)</label>
+              <input id="cldFolder" placeholder="ví dụ: uploads/web" />
+            </div>
+          </div>
+
+          <div class="output" style="margin-top: 14px">
+            <label>Link tạo ra (mỗi dòng là 1 ảnh):</label>
+            <textarea id="output" readonly></textarea>
+            <div class="actions">
+              <button id="btnCopy" class="btn">Sao chép</button>
+              <span class="badge" id="copyStatus" style="display: none"
+                >Đã sao chép ✓</span
+              >
+            </div>
+            <div class="status" id="status">Chưa có tác vụ.</div>
+          </div>
+
+          <details style="margin-top: 12px">
+            <summary>Hướng dẫn nhanh</summary>
+            <ul class="list">
+              <li>
+                Dùng <b>link tạm (blob:)</b> để xem nhanh trước khi upload thật.
+              </li>
+              <li>
+                Để có link công khai bền vững, nhập <b>Imgur Client-ID</b> và
+                bấm “Upload lên Imgur”, hoặc nhập <b>Cloud Name</b> +
+                <b>Unsigned Preset</b> và bấm “Upload lên Cloudinary”.
+              </li>
+              <li>
+                Bật “Unsigned Upload” trong Cloudinary Console để dùng không cần
+                secret.
+              </li>
+            </ul>
+          </details>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const dropzone = document.getElementById("dropzone");
+      const fileInput = document.getElementById("fileInput");
+      const preview = document.getElementById("preview");
+      const btnTemp = document.getElementById("btnTemp");
+      const btnImgur = document.getElementById("btnImgur");
+      const btnCloud = document.getElementById("btnCloudinary");
+      const btnClear = document.getElementById("btnClear");
+      const output = document.getElementById("output");
+      const statusEl = document.getElementById("status");
+      const btnCopy = document.getElementById("btnCopy");
+      const copyStatus = document.getElementById("copyStatus");
+
+      const imgurClientIdEl = document.getElementById("imgurClientId");
+      const cldNameEl = document.getElementById("cldName");
+      const cldPresetEl = document.getElementById("cldPreset");
+      const cldFolderEl = document.getElementById("cldFolder");
+
+      let files = [];
+
+      function humanSize(bytes) {
+        const units = ["B", "KB", "MB", "GB"];
+        let i = 0,
+          n = bytes;
+        while (n >= 1024 && i < units.length - 1) {
+          n /= 1024;
+          i++;
+        }
+        return `${n.toFixed(n >= 10 || i === 0 ? 0 : 1)} ${units[i]}`;
+      }
+
+      function renderPreview() {
+        preview.innerHTML = "";
+        files.forEach((f, idx) => {
+          const url = URL.createObjectURL(f);
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+          <img src="${url}" alt="preview-${idx}" onload="URL.revokeObjectURL('${url}')"/>
+          <div class="meta">
+            <span title="${f.name}">${
+            f.name.length > 18
+              ? f.name.slice(0, 8) + "…" + f.name.slice(-8)
+              : f.name
+          }</span>
+            <span>${humanSize(f.size)}</span>
+          </div>`;
+          preview.appendChild(card);
+        });
+      }
+
+      function setStatus(msg) {
+        statusEl.textContent = msg;
+      }
+
+      function pushOutput(lines) {
+        const existing = output.value.trim();
+        const toAdd = Array.isArray(lines)
+          ? lines.join("\n")
+          : String(lines || "");
+        output.value = existing ? existing + "\n" + toAdd : toAdd;
+        output.scrollTop = output.scrollHeight;
+      }
+
+      // File selection handlers
+      dropzone.addEventListener("click", () => fileInput.click());
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("hover");
+      });
+      dropzone.addEventListener("dragleave", () =>
+        dropzone.classList.remove("hover")
+      );
+      dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.classList.remove("hover");
+        const dropped = [...(e.dataTransfer?.files || [])].filter((f) =>
+          f.type.startsWith("image/")
+        );
+        if (dropped.length) {
+          files.push(...dropped);
+          renderPreview();
+          setStatus(`Đã thêm ${dropped.length} ảnh.`);
+        }
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const selected = [...(e.target.files || [])].filter((f) =>
+          f.type.startsWith("image/")
+        );
+        if (selected.length) {
+          files.push(...selected);
+          renderPreview();
+          setStatus(`Đã chọn ${selected.length} ảnh.`);
+        }
+        fileInput.value = "";
+      });
+
+      // Paste support
+      window.addEventListener("paste", (e) => {
+        const items = [...(e.clipboardData?.items || [])];
+        const imgs = items
+          .map((it) => (it.kind === "file" ? it.getAsFile() : null))
+          .filter(Boolean)
+          .filter((f) => f.type.startsWith("image/"));
+        if (imgs.length) {
+          files.push(...imgs);
+          renderPreview();
+          setStatus(`Dán ${imgs.length} ảnh từ clipboard.`);
+        }
+      });
+
+      // Temp blob links
+      btnTemp.addEventListener("click", () => {
+        if (!files.length)
+          return setStatus("Chưa có ảnh. Hãy chọn/kéo-thả/dán ảnh trước.");
+        const links = files.map((f) => URL.createObjectURL(f));
+        pushOutput(links);
+        setStatus(
+          `Đã tạo ${links.length} link tạm (blob:). Lưu ý: chỉ hoạt động trong trình duyệt hiện tại.`
+        );
+      });
+
+      // Imgur upload
+      async function uploadImgur(file, clientId) {
+        const fd = new FormData();
+        fd.append("image", file);
+        const res = await fetch("https://api.imgur.com/3/image", {
+          method: "POST",
+          headers: { Authorization: `Client-ID ${clientId}` },
+          body: fd,
+        });
+        if (!res.ok) {
+          throw new Error(`Imgur lỗi ${res.status}`);
+        }
+        const json = await res.json();
+        if (!json?.data?.link) throw new Error("Không nhận được link từ Imgur");
+        return json.data.link;
+      }
+
+      btnImgur.addEventListener("click", async () => {
+        if (!files.length) return setStatus("Chưa có ảnh để upload.");
+        const clientId = imgurClientIdEl.value.trim();
+        if (!clientId) return setStatus("Hãy nhập Imgur Client-ID để upload.");
+        setStatus("Đang upload lên Imgur…");
+        try {
+          const results = [];
+          for (const f of files) {
+            const link = await uploadImgur(f, clientId);
+            results.push(link);
+            pushOutput(link);
+          }
+          setStatus(`Tải lên Imgur thành công ${results.length} ảnh.`);
+        } catch (err) {
+          console.error(err);
+          setStatus("Upload Imgur thất bại: " + err.message);
+        }
+      });
+
+      // Cloudinary upload (unsigned)
+      async function uploadCloudinary(file, cloudName, preset, folder) {
+        const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+        const fd = new FormData();
+        fd.append("upload_preset", preset);
+        fd.append("file", file);
+        if (folder) fd.append("folder", folder);
+        const res = await fetch(url, { method: "POST", body: fd });
+        if (!res.ok) {
+          throw new Error(`Cloudinary lỗi ${res.status}`);
+        }
+        const json = await res.json();
+        if (!json?.secure_url)
+          throw new Error("Không nhận được secure_url từ Cloudinary");
+        return json.secure_url;
+      }
+
+      btnCloud.addEventListener("click", async () => {
+        if (!files.length) return setStatus("Chưa có ảnh để upload.");
+        const cloud = cldNameEl.value.trim();
+        const preset = cldPresetEl.value.trim();
+        const folder = cldFolderEl.value.trim();
+        if (!cloud || !preset)
+          return setStatus("Nhập Cloud Name và Unsigned Upload Preset trước.");
+        setStatus("Đang upload lên Cloudinary…");
+        try {
+          const results = [];
+          for (const f of files) {
+            const link = await uploadCloudinary(f, cloud, preset, folder);
+            results.push(link);
+            pushOutput(link);
+          }
+          setStatus(`Tải lên Cloudinary thành công ${results.length} ảnh.`);
+        } catch (err) {
+          console.error(err);
+          setStatus("Upload Cloudinary thất bại: " + err.message);
+        }
+      });
+
+      // Clear
+      btnClear.addEventListener("click", () => {
+        files = [];
+        preview.innerHTML = "";
+        output.value = "";
+        setStatus("Đã xoá danh sách.");
+      });
+
+      // Copy
+      btnCopy.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(output.value);
+          copyStatus.style.display = "inline-grid";
+          setTimeout(() => (copyStatus.style.display = "none"), 1200);
+        } catch (err) {
+          setStatus("Không thể sao chép: " + err.message);
+        }
+      });
+    </script>
+  </body>
+</html>

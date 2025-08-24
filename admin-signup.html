@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tạo tài khoản Admin</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --bg1: #f6f7ff;
+        --bg2: #eef9ff;
+        --accent1: #7b61ff;
+        --accent2: #42d392;
+        --glass: rgba(255, 255, 255, 0.1);
+        --muted: #9aa4b2;
+        --error: #ff6b6b;
+        --success: #42d392;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: radial-gradient(
+            1200px 600px at 10% 20%,
+            rgba(123, 97, 255, 0.12),
+            transparent
+          ),
+          radial-gradient(
+            1000px 500px at 90% 80%,
+            rgba(66, 211, 146, 0.08),
+            transparent
+          ),
+          linear-gradient(180deg, var(--bg1), var(--bg2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+        color: #0f1724;
+        position: relative;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 520px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.85),
+          rgba(255, 255, 255, 0.78)
+        );
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(12, 20, 40, 0.12);
+        padding: 28px;
+        overflow: hidden;
+        backdrop-filter: blur(6px) saturate(120%);
+        animation: pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+        position: relative; /* để chứa overlay */
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(0.99);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .hero {
+        padding: 18px 12px;
+      }
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--accent1), #5f8bff);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        box-shadow: 0 6px 18px rgba(123, 97, 255, 0.18);
+      }
+      h1 {
+        margin: 14px 0 6px;
+        font-size: 1.6rem;
+        color: #0b1230;
+      }
+      p.lead {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 0.95rem;
+      }
+
+      form {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.6),
+          rgba(255, 255, 255, 0.5)
+        );
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        position: relative;
+      }
+
+      label {
+        display: block;
+        font-size: 0.85rem;
+        color: #254;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      .field {
+        margin-bottom: 14px;
+        position: relative;
+      }
+      input[type="text"],
+      input[type="password"],
+      input[type="date"],
+      input[type="tel"] {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(15, 20, 36, 0.08);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), #fff);
+        transition: box-shadow 0.18s, transform 0.15s, border-color 0.15s;
+        outline: none;
+        color: #0b1230;
+      }
+      input::placeholder {
+        color: #b6c0cc;
+      }
+      input:focus {
+        box-shadow: 0 6px 18px rgba(123, 97, 255, 0.11);
+        border-color: rgba(123, 97, 255, 0.45);
+        transform: translateY(-1px);
+      }
+
+      .input-icon {
+        position: absolute;
+        right: 14px;
+        top: 38px;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+        justify-content: flex-end;
+      }
+      button.primary {
+        background: linear-gradient(90deg, var(--accent1), #5f8bff);
+        border: none;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 8px 22px rgba(91, 73, 255, 0.14);
+        transition: transform 0.14s, box-shadow 0.14s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      button.primary:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 36px rgba(91, 73, 255, 0.18);
+      }
+      button.primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+      }
+
+      .note {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 10px;
+        min-height: 24px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+      }
+
+      .note.error {
+        color: var(--error);
+        background: rgba(255, 107, 107, 0.1);
+        border-left: 3px solid var(--error);
+      }
+
+      .note.success {
+        color: var(--success);
+        background: rgba(66, 211, 146, 0.1);
+        border-left: 3px solid var(--success);
+      }
+
+      .note.info {
+        color: var(--accent1);
+        background: rgba(123, 97, 255, 0.1);
+        border-left: 3px solid var(--accent1);
+      }
+
+      .info {
+        font-size: 0.9rem;
+        color: #123;
+        background: linear-gradient(
+          180deg,
+          rgba(66, 211, 146, 0.06),
+          rgba(123, 97, 255, 0.04)
+        );
+        border-radius: 10px;
+        padding: 12px;
+        border: 1px solid rgba(15, 20, 36, 0.04);
+        margin-top: 18px;
+      }
+
+      .small {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      footer.small {
+        margin-top: 8px;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      /* Overlay khóa form */
+      #overlayLocked {
+        position: absolute;
+        top: 28px;
+        left: 28px;
+        right: 28px;
+        bottom: 28px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        z-index: 10;
+        text-align: center;
+        color: var(--accent1);
+        font-weight: 600;
+        font-size: 1.1rem;
+        box-shadow: 0 0 30px rgba(123, 97, 255, 0.3);
+        padding: 20px;
+      }
+
+      #overlayLocked .overlayContent:focus {
+        outline: 3px solid var(--accent1);
+        outline-offset: 6px;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 14px;
+      }
+
+      .form-row .field {
+        flex: 1;
+        margin-bottom: 0;
+      }
+
+      @media (max-width: 600px) {
+        .form-row {
+          flex-direction: column;
+          gap: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" role="main" aria-labelledby="title">
+      <div class="hero">
+        <div class="logo">
+          <i class="fas fa-user-shield"></i>
+          <span>KNY Admin</span>
+        </div>
+        <h1 id="title">Tạo tài khoản Admin</h1>
+        <p class="lead">
+          Chỉ được tạo 1 tài khoản admin duy nhất. Nếu đã có tài khoản, hệ thống
+          sẽ không cho tạo thêm.
+        </p>
+        <div style="height: 12px"></div>
+
+        <form id="createForm" autocomplete="off" novalidate>
+          <div class="field">
+            <label for="username"
+              >Tên đăng nhập <span style="color: var(--error)">*</span></label
+            >
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="ví dụ: admin"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="birthdate"
+                >Ngày sinh <span style="color: var(--error)">*</span></label
+              >
+              <input id="birthdate" name="birthdate" type="date" required />
+            </div>
+
+            <div class="field">
+              <label for="phone"
+                >Số điện thoại <span style="color: var(--error)">*</span></label
+              >
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="ví dụ: 0912345678"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password"
+              >Mật khẩu <span style="color: var(--error)">*</span></label
+            >
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="mật khẩu mạnh"
+              required
+            />
+            <i class="fas fa-eye password-toggle" id="passwordToggle"></i>
+          </div>
+
+          <div class="field">
+            <label for="confirm"
+              >Xác nhận mật khẩu
+              <span style="color: var(--error)">*</span></label
+            >
+            <input
+              id="confirm"
+              name="confirm"
+              type="password"
+              placeholder="nhập lại mật khẩu"
+              required
+            />
+          </div>
+
+          <div class="actions">
+            <button class="primary" type="submit">
+              <i class="fas fa-user-plus"></i> Tạo tài khoản
+            </button>
+          </div>
+
+          <div
+            class="note"
+            id="messageArea"
+            aria-live="polite"
+            style="min-height: 24px"
+          ></div>
+        </form>
+
+        <!-- Overlay khi đã có tài khoản -->
+        <div
+          id="overlayLocked"
+          aria-live="polite"
+          role="alert"
+          aria-label="Thông báo tài khoản đã có"
+          style="display: none"
+        >
+          <div class="overlayContent" tabindex="0">
+            <!-- SVG icon ổ khoá -->
+            <svg
+              version="1.1"
+              id="Capa_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 489.3 489.3"
+              style="enable-background: new 0 0 489.3 489.3"
+              xml:space="preserve"
+              width="80"
+              height="80"
+              fill="#7b61ff"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <g>
+                <path
+                  d="M95.55,489.3h298.2c21.4,0,38.8-17.4,38.8-38.8V236.8c0-21.4-17.4-38.8-38.8-38.8h-1v-51.1c0-81-65.9-146.9-146.9-146.9
+                    S98.95,65.9,98.95,146.9V198h-3.4c-21.4,0-38.8,17.4-38.8,38.8v213.7C56.75,472,74.15,489.3,95.55,489.3z M262.25,349.3v14.4
+                    c0,1.7-0.7,3.3-1.9,4.5l-13.1,13.1c-0.4,0.4-0.4,1,0,1.4l9.8,9.8c0.6,0.6,0.6,1.5,0,2.1l-10.9,10.9c-0.4,0.4-0.4,1,0,1.4l9.2,9.2
+                    c0.9,0.9,1.4,2.1,1.4,3.4v3.6l-12.8,12.5c-1.1,1.1-2.8,1.1-4,0.1l-11-9.5c-1.8-1.6-2.9-3.9-2.9-6.4v-71l0,0
+                    c-10.7-6.3-17.9-18-17.9-31.3c0-20.1,16.3-36.3,36.3-36.3s36.3,16.3,36.3,36.3C280.95,331.1,273.45,343.1,262.25,349.3z M163.25,147
+                    c0-45.6,37.1-82.6,82.6-82.6c45.6,0,82.6,37.1,82.6,82.6v51.1h-165.2V147z"
+                />
+              </g>
+            </svg>
+            <p>Đã có tài khoản admin. Không thể tạo thêm.</p>
+            <p style="font-size: 0.9rem; margin-top: 10px; color: var(--muted)">
+              <a
+                href="admin-login.html"
+                style="color: var(--accent1); text-decoration: none"
+              >
+                <i class="fas fa-sign-in-alt"></i> Đi đến trang đăng nhập
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="info">
+          <div><strong>Ghi chú bảo mật (demo):</strong></div>
+          <div class="small" style="margin-top: 6px">
+            Mật khẩu được băm (SHA-256) trước khi lưu. Tuy nhiên lưu trữ
+            client-side không an toàn cho môi trường production.
+          </div>
+        </div>
+
+        <footer class="small">KNY Admin • Demo • Mã nguồn client-side</footer>
+      </div>
+    </div>
+
+    <script>
+      async function sha256Hex(message) {
+        const enc = new TextEncoder();
+        const data = enc.encode(message);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+      }
+
+      const STORAGE_KEY = "kny_admin_account";
+
+      const usernameEl = document.getElementById("username");
+      const passwordEl = document.getElementById("password");
+      const confirmEl = document.getElementById("confirm");
+      const birthdateEl = document.getElementById("birthdate");
+      const phoneEl = document.getElementById("phone");
+      const form = document.getElementById("createForm");
+      const messageArea = document.getElementById("messageArea");
+      const overlayLocked = document.getElementById("overlayLocked");
+      const passwordToggle = document.getElementById("passwordToggle");
+
+      // Thiết lập ngày sinh tối đa (18 tuổi trở lên)
+      const today = new Date();
+      const maxBirthdate = new Date();
+      maxBirthdate.setFullYear(today.getFullYear() - 18);
+      birthdateEl.max = maxBirthdate.toISOString().split("T")[0];
+
+      // Kiểm tra trạng thái tài khoản admin
+      function hasAdminAccount() {
+        return localStorage.getItem(STORAGE_KEY) !== null;
+      }
+
+      // Khóa form và hiển thị overlay khi đã có tài khoản admin
+      function lockForm() {
+        usernameEl.disabled = true;
+        passwordEl.disabled = true;
+        confirmEl.disabled = true;
+        birthdateEl.disabled = true;
+        phoneEl.disabled = true;
+        form
+          .querySelector("button[type=submit]")
+          .setAttribute("disabled", "disabled");
+        overlayLocked.style.display = "flex";
+        // Focus vào overlay để người dùng hỗ trợ tiếp cận dễ dàng
+        overlayLocked.querySelector(".overlayContent").focus();
+      }
+
+      // Chuyển đổi hiển thị mật khẩu
+      passwordToggle.addEventListener("click", function () {
+        if (passwordEl.type === "password") {
+          passwordEl.type = "text";
+          passwordToggle.classList.remove("fa-eye");
+          passwordToggle.classList.add("fa-eye-slash");
+        } else {
+          passwordEl.type = "password";
+          passwordToggle.classList.remove("fa-eye-slash");
+          passwordToggle.classList.add("fa-eye");
+        }
+      });
+
+      // Kiểm tra số điện thoại hợp lệ (Việt Nam)
+      function isValidPhone(phone) {
+        const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+        return phoneRegex.test(phone);
+      }
+
+      // Kiểm tra ngày sinh hợp lệ (ít nhất 18 tuổi)
+      function isValidBirthdate(birthdate) {
+        const birthDate = new Date(birthdate);
+        const today = new Date();
+        const minAgeDate = new Date();
+        minAgeDate.setFullYear(today.getFullYear() - 0);
+        return birthDate <= minAgeDate;
+      }
+
+      // Hiển thị thông báo
+      function showMessage(text, type = "") {
+        messageArea.textContent = text;
+        messageArea.className = "note" + (type ? " " + type : "");
+      }
+
+      // Khởi động: nếu đã có tài khoản thì khóa form và bật overlay
+      if (hasAdminAccount()) {
+        lockForm();
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        showMessage("");
+
+        const username = usernameEl.value.trim();
+        const password = passwordEl.value;
+        const confirm = confirmEl.value;
+        const birthdate = birthdateEl.value;
+        const phone = phoneEl.value.trim();
+
+        if (!username || !password || !confirm || !birthdate || !phone) {
+          showMessage("Vui lòng điền đủ thông tin.", "error");
+          return;
+        }
+
+        if (username.length < 3) {
+          showMessage("Tên đăng nhập tối thiểu 3 ký tự.", "error");
+          return;
+        }
+
+        if (!isValidBirthdate(birthdate)) {
+          showMessage(
+            "Bạn phải từ 0 tuổi trở lên để tạo tài khoản admin.",
+            "error"
+          );
+          return;
+        }
+
+        if (!isValidPhone(phone)) {
+          showMessage(
+            "Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam.",
+            "error"
+          );
+          return;
+        }
+
+        if (password.length < 6) {
+          showMessage("Mật khẩu tối thiểu 6 ký tự.", "error");
+          return;
+        }
+
+        if (password !== confirm) {
+          showMessage("Mật khẩu xác nhận không khớp.", "error");
+          return;
+        }
+
+        if (hasAdminAccount()) {
+          // Trường hợp vừa lập trình khóa form, không cho tạo thêm nữa
+          lockForm();
+          return;
+        }
+
+        // Tạo tài khoản
+        showMessage("Đang tạo tài khoản...", "info");
+        try {
+          const hashed = await sha256Hex(password);
+          const payload = {
+            username,
+            passwordHash: hashed,
+            birthdate,
+            phone,
+            createdAt: new Date().toISOString(),
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+          showMessage("Tạo tài khoản thành công 🎉", "success");
+          lockForm();
+        } catch (err) {
+          console.error(err);
+          showMessage("Có lỗi khi tạo tài khoản.", "error");
+        }
+      });
+    </script>
+  </body>
+</html>

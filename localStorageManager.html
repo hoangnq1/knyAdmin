@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Storage Manager</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --bg-primary: #0d1117;
+        --bg-secondary: #161b22;
+        --bg-tertiary: #21262d;
+        --bg-card: #1a202c;
+        --text-primary: #e6edf3;
+        --text-secondary: #c9d1d9;
+        --accent-blue: #58a6ff;
+        --accent-purple: #d2a8ff;
+        --accent-green: #3fb950;
+        --accent-red: #f85149;
+        --accent-orange: #ffa657;
+        --border-color: #30363d;
+        --gradient-start: #ff6b6b;
+        --gradient-end: #4ecdc4;
+        --shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: linear-gradient(135deg, var(--bg-primary) 0%, #131a25 100%);
+        color: var(--text-primary);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        min-height: 100vh;
+        background-attachment: fixed;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        text-align: center;
+        padding: 30px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+        color: var(--text-primary);
+        margin-bottom: 15px;
+        text-shadow: 0 2px 10px rgba(88, 166, 255, 0.3);
+        background: linear-gradient(
+          45deg,
+          var(--accent-blue),
+          var(--accent-purple)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeIn 1s ease-out, pulse 4s infinite alternate;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+        margin-bottom: 30px;
+        animation: slideIn 1s ease-out;
+      }
+
+      h3 {
+        color: var(--accent-blue);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+        margin: 25px 0 20px;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+      }
+
+      h3 i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+      }
+
+      p {
+        margin: 15px 0 8px;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      .card {
+        background: var(--bg-card);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        border: 1px solid var(--border-color);
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+      }
+
+      .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tab {
+        padding: 15px 25px;
+        cursor: pointer;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-bottom: none;
+        margin-right: 5px;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        transition: var(--transition);
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+      }
+
+      .tab i {
+        margin-right: 8px;
+        font-size: 1.1rem;
+      }
+
+      .tab:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .tab.active {
+        background: var(--bg-tertiary);
+        color: var(--accent-blue);
+        font-weight: bold;
+        border-color: var(--accent-blue);
+        transform: translateY(1px);
+      }
+
+      .tab-content {
+        display: none;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+      }
+
+      .tab-content.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      textarea,
+      input,
+      select {
+        width: 100%;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 14px;
+        margin-top: 8px;
+        border-radius: 8px;
+        font-family: "Fira Code", monospace;
+        transition: var(--transition);
+        box-sizing: border-box;
+        font-size: 15px;
+      }
+
+      textarea:focus,
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      button {
+        padding: 14px 20px;
+        margin: 8px 5px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+      }
+
+      button i {
+        margin-right: 8px;
+      }
+
+      button:hover {
+        opacity: 0.9;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .danger {
+        background: var(--accent-red);
+        color: white;
+      }
+
+      .success {
+        background: var(--accent-green);
+        color: white;
+      }
+
+      .primary {
+        background: var(--accent-blue);
+        color: var(--bg-primary);
+      }
+
+      .warning {
+        background: var(--accent-orange);
+        color: white;
+      }
+
+      .flex-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .flex-row > * {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        text-align: left;
+        vertical-align: top;
+        font-size: 15px;
+      }
+
+      th {
+        background: var(--bg-tertiary);
+        color: var(--accent-blue);
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      tr:hover td {
+        background: rgba(88, 166, 255, 0.05);
+        transition: var(--transition);
+      }
+
+      td.value-cell {
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-width: 500px;
+        font-family: "Fira Code", monospace;
+        color: var(--accent-purple);
+      }
+
+      pre {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        padding: 18px;
+        margin-top: 20px;
+        border-radius: 12px;
+        white-space: pre-wrap;
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        color: #a5d6ff;
+        max-height: 300px;
+        overflow-y: auto;
+        box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      .security-notice {
+        background: linear-gradient(
+          135deg,
+          var(--bg-tertiary) 0%,
+          #2a1e2c 100%
+        );
+        border-left: 4px solid var(--accent-red);
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        animation: pulseWarning 2s infinite;
+      }
+
+      .cookie-options {
+        background: var(--bg-tertiary);
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 15px;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .cookie-options label {
+        display: block;
+        margin: 12px 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .cookie-options input[type="checkbox"] {
+        width: auto;
+        margin-right: 10px;
+      }
+
+      .two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+      }
+
+      .feature-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .badge {
+        background: rgba(88, 166, 255, 0.15);
+        color: var(--accent-blue);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+      }
+
+      .badge i {
+        margin-right: 5px;
+      }
+
+      .decoration {
+        position: absolute;
+        z-index: 1;
+        opacity: 0.1;
+      }
+
+      .decoration-1 {
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: linear-gradient(
+          45deg,
+          var(--accent-blue),
+          var(--accent-purple)
+        );
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .decoration-2 {
+        bottom: -80px;
+        left: -80px;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: linear-gradient(
+          45deg,
+          var(--accent-green),
+          var(--accent-blue)
+        );
+        animation: float 10s ease-in-out infinite reverse;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulseWarning {
+        0% {
+          box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(248, 81, 73, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(248, 81, 73, 0);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(5deg);
+        }
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+      }
+
+      @keyframes highlight {
+        0% {
+          background-color: transparent;
+        }
+        50% {
+          background-color: rgba(88, 166, 255, 0.2);
+        }
+        100% {
+          background-color: transparent;
+        }
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .two-column {
+          grid-template-columns: 1fr;
+        }
+
+        .flex-row {
+          flex-direction: column;
+        }
+
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        .tab {
+          padding: 12px 15px;
+          font-size: 14px;
+        }
+
+        .tab i {
+          font-size: 1rem;
+        }
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--accent-blue);
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-purple);
+      }
+
+      /* Code editor styling */
+      #code {
+        min-height: 150px;
+        font-family: "Fira Code", monospace;
+        line-height: 1.5;
+      }
+
+      /* Button groups */
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 15px 0;
+      }
+
+      /* Toast notification */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        background: var(--accent-green);
+        color: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        display: flex;
+        align-items: center;
+        z-index: 1000;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: var(--transition);
+      }
+
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .toast.error {
+        background: var(--accent-red);
+      }
+
+      .toast i {
+        margin-right: 10px;
+      }
+
+      /* Modal styling */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal {
+        background: var(--bg-card);
+        border-radius: 12px;
+        padding: 25px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: var(--shadow);
+        transform: translateY(-20px);
+        transition: var(--transition);
+        border: 1px solid var(--border-color);
+      }
+
+      .modal-overlay.active .modal {
+        transform: translateY(0);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .modal-title {
+        font-size: 1.4rem;
+        color: var(--accent-blue);
+        display: flex;
+        align-items: center;
+      }
+
+      .modal-title i {
+        margin-right: 10px;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .modal-close:hover {
+        color: var(--accent-red);
+        transform: rotate(90deg);
+      }
+
+      .modal-body {
+        margin-bottom: 25px;
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .modal-input {
+        width: 100%;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 14px;
+        margin-top: 8px;
+        border-radius: 8px;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        transition: var(--transition);
+        box-sizing: border-box;
+        font-size: 15px;
+      }
+
+      .modal-input:focus {
+        outline: none;
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+      }
+
+      .modal-message {
+        padding: 15px;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0;
+      }
+
+      .modal-message.warning {
+        border-left-color: var(--accent-orange);
+      }
+
+      .modal-message.error {
+        border-left-color: var(--accent-red);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="decoration decoration-1"></div>
+        <div class="decoration decoration-2"></div>
+        <div class="header-content">
+          <h1><i class="fas fa-shield-alt"></i> Universal Storage Manager</h1>
+          <h2>
+            Công cụ quản lý Local Storage, Session Storage và Cookies mạnh mẽ
+          </h2>
+        </div>
+      </header>
+
+      <div class="feature-badges">
+        <div class="badge"><i class="fas fa-lock"></i> Bảo mật nâng cao</div>
+        <div class="badge"><i class="fas fa-bolt"></i> Giao diện động</div>
+        <div class="badge"><i class="fas fa-code"></i> Hỗ trợ JavaScript</div>
+        <div class="badge">
+          <i class="fas fa-cookie-bite"></i> Quản lý Cookie
+        </div>
+        <div class="badge">
+          <i class="fas fa-database"></i> Local & Session Storage
+        </div>
+      </div>
+
+      <div class="security-notice">
+        <strong
+          ><i class="fas fa-exclamation-triangle"></i> CẢNH BÁO BẢO MẬT:</strong
+        >
+        Công cụ này cung cấp quyền truy cập mạnh mẽ vào dữ liệu trình duyệt. Chỉ
+        sử dụng trên các trang web bạn tin tưởng và hiểu rõ rủi ro bảo mật.
+      </div>
+
+      <div class="card">
+        <div class="tabs">
+          <div class="tab active" data-tab="javascript">
+            <i class="fas fa-code"></i> JavaScript
+          </div>
+          <div class="tab" data-tab="localstorage">
+            <i class="fas fa-database"></i> Local Storage
+          </div>
+          <div class="tab" data-tab="sessionstorage">
+            <i class="fas fa-window-restore"></i> Session Storage
+          </div>
+          <div class="tab" data-tab="cookies">
+            <i class="fas fa-cookie"></i> Cookies
+          </div>
+        </div>
+
+        <div class="tab-content active" id="javascript-tab">
+          <h3><i class="fas fa-terminal"></i> Chạy lệnh JavaScript</h3>
+          <textarea id="code" rows="6" placeholder="Nhập lệnh JS..."></textarea>
+          <div class="button-group">
+            <button onclick="runCode()" class="primary">
+              <i class="fas fa-play"></i> Chạy lệnh
+            </button>
+            <button onclick="clearCode()" class="warning">
+              <i class="fas fa-broom"></i> Xóa mã
+            </button>
+          </div>
+
+          <h3><i class="fas fa-output-text"></i> Kết quả:</h3>
+          <pre id="output"></pre>
+        </div>
+
+        <div class="tab-content" id="localstorage-tab">
+          <h3><i class="fas fa-database"></i> Quản lý Local Storage</h3>
+          <div class="flex-row">
+            <button onclick="viewStorage('localStorage')" class="success">
+              <i class="fas fa-eye"></i> Xem toàn bộ dữ liệu
+            </button>
+            <button onclick="clearStorage('localStorage')" class="danger">
+              <i class="fas fa-trash"></i> Xóa toàn bộ dữ liệu
+            </button>
+            <button onclick="restoreStorage('localStorage')" class="success">
+              <i class="fas fa-undo"></i> Khôi phục dữ liệu
+            </button>
+          </div>
+
+          <div class="flex-row">
+            <input
+              type="text"
+              id="ls-keyToRemove"
+              placeholder="Nhập key cần xóa"
+            />
+            <button onclick="removeKey('localStorage')" class="danger">
+              <i class="fas fa-minus-circle"></i> Xóa key này
+            </button>
+          </div>
+
+          <h3><i class="fas fa-plus-circle"></i> Thêm Key mới:</h3>
+          <div class="flex-row">
+            <input type="text" id="ls-newKey" placeholder="Key mới" />
+            <input type="text" id="ls-newValue" placeholder="Value mới" />
+          </div>
+          <button onclick="addKey('localStorage')" class="success">
+            <i class="fas fa-plus"></i> Thêm
+          </button>
+
+          <div id="localStorageTable"></div>
+        </div>
+
+        <div class="tab-content" id="sessionstorage-tab">
+          <h3><i class="fas fa-window-restore"></i> Quản lý Session Storage</h3>
+          <div class="flex-row">
+            <button onclick="viewStorage('sessionStorage')" class="success">
+              <i class="fas fa-eye"></i> Xem toàn bộ dữ liệu
+            </button>
+            <button onclick="clearStorage('sessionStorage')" class="danger">
+              <i class="fas fa-trash"></i> Xóa toàn bộ dữ liệu
+            </button>
+            <button onclick="restoreStorage('sessionStorage')" class="success">
+              <i class="fas fa-undo"></i> Khôi phục dữ liệu
+            </button>
+          </div>
+
+          <div class="flex-row">
+            <input
+              type="text"
+              id="ss-keyToRemove"
+              placeholder="Nhập key cần xóa"
+            />
+            <button onclick="removeKey('sessionStorage')" class="danger">
+              <i class="fas fa-minus-circle"></i> Xóa key này
+            </button>
+          </div>
+
+          <h3><i class="fas fa-plus-circle"></i> Thêm Key mới:</h3>
+          <div class="flex-row">
+            <input type="text" id="ss-newKey" placeholder="Key mới" />
+            <input type="text" id="ss-newValue" placeholder="Value mới" />
+          </div>
+          <button onclick="addKey('sessionStorage')" class="success">
+            <i class="fas fa-plus"></i> Thêm
+          </button>
+
+          <div id="sessionStorageTable"></div>
+        </div>
+
+        <div class="tab-content" id="cookies-tab">
+          <h3><i class="fas fa-cookie-bite"></i> Quản lý Cookies</h3>
+          <div class="flex-row">
+            <button onclick="viewCookies()" class="success">
+              <i class="fas fa-eye"></i> Xem toàn bộ Cookies
+            </button>
+            <button onclick="clearCookies()" class="danger">
+              <i class="fas fa-trash"></i> Xóa toàn bộ Cookies
+            </button>
+          </div>
+
+          <div class="flex-row">
+            <input
+              type="text"
+              id="cookie-to-remove"
+              placeholder="Nhập tên cookie cần xóa"
+            />
+            <button onclick="removeCookie()" class="danger">
+              <i class="fas fa-minus-circle"></i> Xóa cookie này
+            </button>
+          </div>
+
+          <h3><i class="fas fa-plus-circle"></i> Thêm Cookie mới:</h3>
+          <div class="two-column">
+            <div>
+              <input type="text" id="cookie-name" placeholder="Tên cookie" />
+              <input type="text" id="cookie-value" placeholder="Giá trị" />
+
+              <div class="cookie-options">
+                <label>
+                  <input
+                    type="number"
+                    id="cookie-max-age"
+                    placeholder="Max-Age (giây)"
+                  />
+                  Max-Age (giây)
+                </label>
+                <label>
+                  <input
+                    type="text"
+                    id="cookie-path"
+                    placeholder="/"
+                    value="/"
+                  />
+                  Path
+                </label>
+                <label>
+                  <input type="text" id="cookie-domain" placeholder="Domain" />
+                  Domain
+                </label>
+                <label>
+                  <input type="checkbox" id="cookie-secure" />
+                  Secure (chỉ gửi qua HTTPS)
+                </label>
+                <label>
+                  <input type="checkbox" id="cookie-httponly" />
+                  HttpOnly (không truy cập được bằng JS)
+                </label>
+                <label>
+                  <input type="checkbox" id="cookie-samesite" />
+                  SameSite=Strict
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <h4><i class="fas fa-eye"></i> Cookie sẽ được tạo:</h4>
+              <pre id="cookie-preview"></pre>
+              <button onclick="addCookie()" class="success">
+                <i class="fas fa-plus"></i> Thêm Cookie
+              </button>
+            </div>
+          </div>
+
+          <div id="cookiesTable"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Dialog -->
+    <div class="modal-overlay" id="modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-title">
+            <i class="fas fa-info-circle"></i> Thông báo
+          </h3>
+          <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-message" id="modal-message"></div>
+          <div id="modal-input-container" style="display: none">
+            <input
+              type="text"
+              class="modal-input"
+              id="modal-input"
+              placeholder="Nhập giá trị..."
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="primary"
+            id="modal-confirm-btn"
+            onclick="handleModalConfirm()"
+          >
+            Xác nhận
+          </button>
+          <button class="warning" id="modal-cancel-btn" onclick="closeModal()">
+            Hủy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Biến toàn cục
+      let backupData = {
+        localStorage: null,
+        sessionStorage: null,
+      };
+
+      // Biến lưu trữ callback cho modal
+      let modalCallback = null;
+      let modalType = "alert"; // alert, confirm, prompt
+
+      // Khởi tạo
+      document.addEventListener("DOMContentLoaded", function () {
+        // Xử lý tab
+        const tabs = document.querySelectorAll(".tab");
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const tabName = tab.getAttribute("data-tab");
+
+            // Ẩn tất cả các tab
+            document
+              .querySelectorAll(".tab")
+              .forEach((t) => t.classList.remove("active"));
+            document
+              .querySelectorAll(".tab-content")
+              .forEach((c) => c.classList.remove("active"));
+
+            // Hiển thị tab được chọn
+            tab.classList.add("active");
+            document.getElementById(`${tabName}-tab`).classList.add("active");
+          });
+        });
+
+        // Cập nhật cookie preview
+        const cookieInputs = document.querySelectorAll(
+          "#cookie-name, #cookie-value, #cookie-max-age, #cookie-path, #cookie-domain"
+        );
+        cookieInputs.forEach((input) => {
+          input.addEventListener("input", updateCookiePreview);
+        });
+
+        const cookieCheckboxes = document.querySelectorAll(
+          "#cookie-secure, #cookie-httponly, #cookie-samesite"
+        );
+        cookieCheckboxes.forEach((checkbox) => {
+          checkbox.addEventListener("change", updateCookiePreview);
+        });
+
+        // Hiệu ứng cho các card
+        const cards = document.querySelectorAll(".card");
+        cards.forEach((card) => {
+          card.addEventListener("mouseenter", () => {
+            card.style.transform = "translateY(-5px)";
+            card.style.boxShadow = "0 15px 30px rgba(0, 0, 0, 0.6)";
+          });
+
+          card.addEventListener("mouseleave", () => {
+            card.style.transform = "translateY(0)";
+            card.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.5)";
+          });
+        });
+      });
+
+      // Hàm hiển thị modal
+      function showModal(
+        title,
+        message,
+        type = "alert",
+        callback = null,
+        defaultValue = ""
+      ) {
+        document.getElementById("modal-title").innerHTML = `<i class="fas ${
+          type === "alert"
+            ? "fa-info-circle"
+            : type === "confirm"
+            ? "fa-question-circle"
+            : "fa-edit"
+        }"></i> ${title}`;
+        document.getElementById("modal-message").textContent = message;
+        document.getElementById("modal-message").className = `modal-message ${
+          type === "confirm" ? "warning" : ""
+        }`;
+
+        // Hiển thị hoặc ẩn input cho prompt
+        const inputContainer = document.getElementById("modal-input-container");
+        if (type === "prompt") {
+          inputContainer.style.display = "block";
+          document.getElementById("modal-input").value = defaultValue;
+        } else {
+          inputContainer.style.display = "none";
+        }
+
+        // Hiển thị hoặc ẩn nút hủy
+        const cancelBtn = document.getElementById("modal-cancel-btn");
+        if (type === "alert") {
+          cancelBtn.style.display = "none";
+        } else {
+          cancelBtn.style.display = "inline-flex";
+        }
+
+        // Lưu callback và loại modal
+        modalCallback = callback;
+        modalType = type;
+
+        // Hiển thị modal
+        document.getElementById("modal").classList.add("active");
+      }
+
+      // Hàm đóng modal
+      function closeModal() {
+        document.getElementById("modal").classList.remove("active");
+        modalCallback = null;
+      }
+
+      // Hàm xử lý khi xác nhận modal
+      function handleModalConfirm() {
+        if (modalType === "prompt") {
+          const value = document.getElementById("modal-input").value;
+          if (modalCallback) modalCallback(value);
+        } else if (modalType === "confirm") {
+          if (modalCallback) modalCallback(true);
+        } else {
+          if (modalCallback) modalCallback();
+        }
+        closeModal();
+      }
+
+      // Hàm cập nhật cookie preview
+      function updateCookiePreview() {
+        const name = document.getElementById("cookie-name").value;
+        const value = document.getElementById("cookie-value").value;
+        const maxAge = document.getElementById("cookie-max-age").value;
+        const path = document.getElementById("cookie-path").value || "/";
+        const domain = document.getElementById("cookie-domain").value;
+        const secure = document.getElementById("cookie-secure").checked;
+        const httpOnly = document.getElementById("cookie-httponly").checked;
+        const sameSite = document.getElementById("cookie-samesite").checked;
+
+        if (!name) {
+          document.getElementById("cookie-preview").textContent =
+            "Nhập tên cookie để xem trước";
+          return;
+        }
+
+        let cookieString = `${encodeURIComponent(name)}=${encodeURIComponent(
+          value
+        )}`;
+
+        if (maxAge) cookieString += `; max-age=${maxAge}`;
+        if (path) cookieString += `; path=${path}`;
+        if (domain) cookieString += `; domain=${domain}`;
+        if (secure) cookieString += "; secure";
+        if (httpOnly) cookieString += "; HttpOnly";
+        if (sameSite) cookieString += "; SameSite=Strict";
+
+        document.getElementById("cookie-preview").textContent = cookieString;
+      }
+
+      // Hàm chạy mã JavaScript
+      function runCode() {
+        const code = document.getElementById("code").value;
+        const outputElement = document.getElementById("output");
+
+        if (!code.trim()) {
+          showToast("⚠ Vui lòng nhập mã JavaScript", "error");
+          return;
+        }
+
+        try {
+          // Sử dụng Function constructor để tránh ảnh hưởng đến phạm vi hiện tại
+          const result = new Function(code)();
+          outputElement.textContent =
+            result !== undefined
+              ? String(result)
+              : "✅ Lệnh đã chạy thành công (không có kết quả trả về)";
+          outputElement.style.animation = "highlight 1s";
+          setTimeout(() => {
+            outputElement.style.animation = "";
+          }, 1000);
+        } catch (error) {
+          outputElement.textContent = `❌ Lỗi: ${error.message}`;
+          showToast(`Lỗi: ${error.message}`, "error");
+        }
+      }
+
+      // Hàm xóa mã
+      function clearCode() {
+        document.getElementById("code").value = "";
+        document.getElementById("output").textContent = "";
+        showToast("Đã xóa mã và kết quả", "success");
+      }
+      // Hàm hiển thị thông báo toast
+      function showToast(message, type = "success") {
+        // Tạo toast nếu chưa tồn tại
+        let toast = document.querySelector(".toast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.className = "toast";
+          document.body.appendChild(toast);
+        }
+
+        // Thiết lập nội dung và kiểu toast
+        toast.innerHTML = `<i class="fas ${
+          type === "success" ? "fa-check-circle" : "fa-exclamation-circle"
+        }"></i> ${message}`;
+        toast.className = `toast ${type}`;
+
+        // Hiển thị toast
+        setTimeout(() => {
+          toast.classList.add("show");
+        }, 10);
+
+        // Ẩn toast sau 3 giây
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Hàm xem storage
+      function viewStorage(storageType) {
+        const storage = window[storageType];
+        const tableElement = document.getElementById(`${storageType}Table`);
+
+        if (!storage || storage.length === 0) {
+          tableElement.innerHTML =
+            "<p>Không có dữ liệu nào trong " + storageType + "</p>";
+          showToast(storageType + " trống", "warning");
+          return;
+        }
+
+        let tableHTML = `
+          <h3><i class="fas fa-table"></i> Dữ liệu trong ${storageType}:</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Value</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        for (let i = 0; i < storage.length; i++) {
+          const key = storage.key(i);
+          const value = storage.getItem(key);
+
+          tableHTML += `
+            <tr>
+              <td>${key}</td>
+              <td class="value-cell">${value}</td>
+              <td>
+                <button onclick="removeSpecificKey('${storageType}', '${key}')" class="danger" style="padding: 5px 10px; font-size: 12px;">
+                  <i class="fas fa-trash"></i> Xóa
+                </button>
+              </td>
+            </tr>
+          `;
+        }
+
+        tableHTML += `
+            </tbody>
+          </table>
+        `;
+
+        tableElement.innerHTML = tableHTML;
+        showToast("Đã tải dữ liệu từ " + storageType, "success");
+      }
+
+      // Hàm xóa storage
+      function clearStorage(storageType) {
+        showModal(
+          "Xác nhận xóa",
+          `Bạn có chắc chắn muốn xóa toàn bộ dữ liệu trong ${storageType}? Hành động này không thể hoàn tác.`,
+          "confirm",
+          function (confirmed) {
+            if (confirmed) {
+              window[storageType].clear();
+              document.getElementById(`${storageType}Table`).innerHTML = "";
+              showToast(
+                "Đã xóa toàn bộ dữ liệu trong " + storageType,
+                "success"
+              );
+            }
+          }
+        );
+      }
+
+      // Hàm sao lưu storage
+      function backupStorage(storageType) {
+        const storage = window[storageType];
+        backupData[storageType] = {};
+
+        for (let i = 0; i < storage.length; i++) {
+          const key = storage.key(i);
+          backupData[storageType][key] = storage.getItem(key);
+        }
+
+        localStorage.setItem("storageBackup", JSON.stringify(backupData));
+        showToast("Đã sao lưu dữ liệu từ " + storageType, "success");
+      }
+
+      // Hàm khôi phục storage
+      function restoreStorage(storageType) {
+        const backup = JSON.parse(localStorage.getItem("storageBackup"));
+
+        if (!backup || !backup[storageType]) {
+          showToast("Không có bản sao lưu nào cho " + storageType, "error");
+          return;
+        }
+
+        // Xóa storage hiện tại trước khi khôi phục
+        window[storageType].clear();
+
+        // Khôi phục dữ liệu
+        for (const key in backup[storageType]) {
+          window[storageType].setItem(key, backup[storageType][key]);
+        }
+
+        showToast("Đã khôi phục dữ liệu cho " + storageType, "success");
+        viewStorage(storageType);
+      }
+
+      // Hàm xóa key cụ thể
+      function removeKey(storageType) {
+        const keyInput = document.getElementById(
+          storageType === "localStorage" ? "ls-keyToRemove" : "ss-keyToRemove"
+        );
+        const key = keyInput.value.trim();
+
+        if (!key) {
+          showToast("Vui lòng nhập key cần xóa", "error");
+          return;
+        }
+
+        if (!window[storageType].getItem(key)) {
+          showToast(`Key "${key}" không tồn tại trong ${storageType}`, "error");
+          return;
+        }
+
+        showModal(
+          "Xác nhận xóa",
+          `Bạn có chắc chắn muốn xóa key "${key}" từ ${storageType}?`,
+          "confirm",
+          function (confirmed) {
+            if (confirmed) {
+              window[storageType].removeItem(key);
+              keyInput.value = "";
+              showToast(`Đã xóa key "${key}" từ ${storageType}`, "success");
+              viewStorage(storageType);
+            }
+          }
+        );
+      }
+
+      // Hàm xóa key cụ thể từ bảng
+      function removeSpecificKey(storageType, key) {
+        showModal(
+          "Xác nhận xóa",
+          `Bạn có chắc chắn muốn xóa key "${key}" từ ${storageType}?`,
+          "confirm",
+          function (confirmed) {
+            if (confirmed) {
+              window[storageType].removeItem(key);
+              showToast(`Đã xóa key "${key}" từ ${storageType}`, "success");
+              viewStorage(storageType);
+            }
+          }
+        );
+      }
+
+      // Hàm thêm key mới
+      function addKey(storageType) {
+        const keyInput = document.getElementById(
+          storageType === "localStorage" ? "ls-newKey" : "ss-newKey"
+        );
+        const valueInput = document.getElementById(
+          storageType === "localStorage" ? "ls-newValue" : "ss-newValue"
+        );
+
+        const key = keyInput.value.trim();
+        const value = valueInput.value.trim();
+
+        if (!key || !value) {
+          showToast("Vui lòng nhập cả key và value", "error");
+          return;
+        }
+
+        window[storageType].setItem(key, value);
+        keyInput.value = "";
+        valueInput.value = "";
+        showToast(`Đã thêm key "${key}" vào ${storageType}`, "success");
+        viewStorage(storageType);
+      }
+
+      // Hàm xem cookies
+      function viewCookies() {
+        const cookies = document.cookie;
+        const tableElement = document.getElementById("cookiesTable");
+
+        if (!cookies) {
+          tableElement.innerHTML = "<p>Không có cookies nào</p>";
+          showToast("Không có cookies", "warning");
+          return;
+        }
+
+        const cookieArray = cookies.split(";");
+        let tableHTML = `
+          <h3><i class="fas fa-table"></i> Cookies hiện tại:</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Tên</th>
+                <th>Giá trị</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        cookieArray.forEach((cookie) => {
+          const [name, value] = cookie.split("=").map((item) => item.trim());
+          tableHTML += `
+            <tr>
+              <td>${decodeURIComponent(name)}</td>
+              <td class="value-cell">${decodeURIComponent(value)}</td>
+              <td>
+                <button onclick="removeSpecificCookie('${name}')" class="danger" style="padding: 5px 10px; font-size: 12px;">
+                  <i class="fas fa-trash"></i> Xóa
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        tableHTML += `
+            </tbody>
+          </table>
+        `;
+
+        tableElement.innerHTML = tableHTML;
+        showToast("Đã tải danh sách cookies", "success");
+      }
+
+      // Hàm xóa cookies
+      function clearCookies() {
+        showModal(
+          "Xác nhận xóa",
+          "Bạn có chắc chắn muốn xóa toàn bộ cookies? Hành động này không thể hoàn tác.",
+          "confirm",
+          function (confirmed) {
+            if (confirmed) {
+              const cookies = document.cookie.split(";");
+
+              for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i];
+                const eqPos = cookie.indexOf("=");
+                const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie =
+                  name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+              }
+
+              document.getElementById("cookiesTable").innerHTML = "";
+              showToast("Đã xóa toàn bộ cookies", "success");
+            }
+          }
+        );
+      }
+
+      // Hàm xóa cookie cụ thể
+      function removeCookie() {
+        const nameInput = document.getElementById("cookie-to-remove");
+        const name = nameInput.value.trim();
+
+        if (!name) {
+          showToast("Vui lòng nhập tên cookie cần xóa", "error");
+          return;
+        }
+
+        showModal(
+          "Xác nhận xóa",
+          `Bạn có chắc chắn muốn xóa cookie "${name}"?`,
+          "confirm",
+          function (confirmed) {
+            if (confirmed) {
+              document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+              nameInput.value = "";
+              showToast(`Đã xóa cookie "${name}"`, "success");
+              viewCookies();
+            }
+          }
+        );
+      }
+
+      // Hàm xóa cookie cụ thể từ bảng
+      function removeSpecificCookie(name) {
+        showModal(
+          "Xác nhận xóa",
+          `Bạn có chắc chắn muốn xóa cookie "${name}"?`,
+          "confirm",
+          function (confirmed) {
+            if (confirmed) {
+              document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+              showToast(`Đã xóa cookie "${name}"`, "success");
+              viewCookies();
+            }
+          }
+        );
+      }
+
+      // Hàm thêm cookie mới
+      function addCookie() {
+        const name = document.getElementById("cookie-name").value.trim();
+        const value = document.getElementById("cookie-value").value.trim();
+
+        if (!name) {
+          showToast("Vui lòng nhập tên cookie", "error");
+          return;
+        }
+
+        let cookieString = `${encodeURIComponent(name)}=${encodeURIComponent(
+          value
+        )}`;
+
+        const maxAge = document.getElementById("cookie-max-age").value;
+        if (maxAge) {
+          cookieString += `; max-age=${maxAge}`;
+        }
+
+        const path = document.getElementById("cookie-path").value;
+        if (path) {
+          cookieString += `; path=${path}`;
+        }
+
+        const domain = document.getElementById("cookie-domain").value;
+        if (domain) {
+          cookieString += `; domain=${domain}`;
+        }
+
+        if (document.getElementById("cookie-secure").checked) {
+          cookieString += "; secure";
+        }
+
+        if (document.getElementById("cookie-httponly").checked) {
+          cookieString += "; HttpOnly";
+        }
+
+        if (document.getElementById("cookie-samesite").checked) {
+          cookieString += "; SameSite=Strict";
+        }
+
+        document.cookie = cookieString;
+        showToast(`Đã thêm cookie "${name}"`, "success");
+
+        // Reset form
+        document.getElementById("cookie-name").value = "";
+        document.getElementById("cookie-value").value = "";
+        document.getElementById("cookie-max-age").value = "";
+        document.getElementById("cookie-path").value = "/";
+        document.getElementById("cookie-domain").value = "";
+        document.getElementById("cookie-secure").checked = false;
+        document.getElementById("cookie-httponly").checked = false;
+        document.getElementById("cookie-samesite").checked = false;
+
+        updateCookiePreview();
+        viewCookies();
+      }
+    </script>
+  </body>
+</html>

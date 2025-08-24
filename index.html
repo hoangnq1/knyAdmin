@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Chủ - Kimetsu no Yaiba</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=SN+Pro:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "SN Pro", sans-serif;
+      }
+
+      body {
+        background: url("https://images4.alphacoders.com/973/thumb-350-973967.webp")
+          no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+      }
+
+      header {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 16px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #e91e63;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+
+      header h1 {
+        font-size: 22px;
+        color: #fff;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+
+      nav {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: bold;
+        padding: 8px 14px;
+        border-radius: 8px;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      nav a:hover {
+        background-color: #e91e63;
+        color: #fff;
+      }
+
+      .hero {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 120px 40px 60px;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      .hero-text {
+        flex: 1;
+        max-width: 600px;
+      }
+
+      .hero-text h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #ff9999;
+      }
+
+      .hero-text p {
+        font-size: 18px;
+        margin-bottom: 30px;
+      }
+
+      .btn {
+        background: #ff7272;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background 0.3s ease;
+      }
+
+      .btn:hover {
+        background: #ff4e4e;
+      }
+
+      .hero-image {
+        flex: 1;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .hero-image img {
+        width: 100%;
+        max-width: 700px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      }
+
+      section {
+        padding: 60px 40px;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      section h2 {
+        font-size: 30px;
+        margin-bottom: 20px;
+        color: #ff9999;
+        border-left: 5px solid #e74c3c;
+        padding-left: 10px;
+      }
+
+      section p {
+        font-size: 18px;
+        line-height: 1.7;
+        margin-bottom: 16px;
+      }
+
+      ul {
+        margin-left: 40px;
+      }
+
+      ul li {
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .character {
+        font-weight: bold;
+        color: #ffb347;
+      }
+
+      h1 {
+        color: #ff9999;
+        text-align: center;
+        margin-top: 40px;
+        font-size: 2.5em;
+      }
+
+      .character-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        margin-top: 30px;
+      }
+
+      .character-card {
+        flex: 1 1 280px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease;
+      }
+
+      .character-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .character-card img {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        border: 3px solid #ff7272;
+      }
+
+      .character-card h3 {
+        margin-bottom: 10px;
+        font-size: 20px;
+        color: #ff9999;
+      }
+
+      footer {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        font-size: 14px;
+        color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Kimetsu no Yaiba (KNY)</h1>
+      <nav>
+        <a href="admin-login.html">Đăng nhập dành cho Admin</a>
+        <a href="/">Trang chủ</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Chào mừng đến với Thế Giới Kimetsu no Yaiba</h1>
+        <p>
+          Khám phá những câu chuyện ly kỳ, nhân vật tuyệt vời và cuộc chiến giữa
+          Thợ Săn Quỷ và lũ Quỷ dữ.
+        </p>
+        <a href="admin-login.html" class="btn"
+          >Bạn là admin? Đăng nhập cho admin ở đây.</a
+        >
+      </div>
+
+      <div class="hero-image">
+        <img
+          src="https://i.pinimg.com/736x/fb/be/02/fbbe027f723cabe36b44332eecee4e80.jpg"
+          alt="KNY"
+        />
+      </div>
+    </section>
+
+    <section class="about">
+      <h2>🌸 Giới thiệu về Kimetsu no Yaiba (Demon Slayer)</h2>
+      <p>
+        <strong>Kimetsu no Yaiba</strong>, còn được biết đến với tên quốc tế là
+        <strong>Demon Slayer</strong>, là một trong những tác phẩm anime và
+        manga đình đám nhất của Nhật Bản trong thập kỷ qua. Bộ truyện được sáng
+        tác bởi <strong>Gotouge Koyoharu</strong>, xuất bản từ năm 2016 đến
+        2020.
+      </p>
+      <p>
+        Kimetsu no Yaiba, còn được biết đến với tên quốc tế là Demon Slayer, là
+        một trong những tác phẩm anime và manga đình đám nhất của Nhật Bản trong
+        thập kỷ qua. Bộ truyện này đã chiếm trọn trái tim của hàng triệu người
+        hâm mộ trên toàn thế giới nhờ vào cốt truyện hấp dẫn, những nhân vật sâu
+        sắc và các trận chiến đầy kịch tính. Kimetsu no Yaiba được sáng tác bởi
+        Gotouge Koyoharu, một tác giả tài năng của Nhật Bản, và được xuất bản
+        lần đầu tiên vào năm 2016. Từ khi ra mắt, manga này đã nhanh chóng thu
+        hút được sự chú ý lớn từ cộng đồng yêu thích truyện tranh, và trở thành
+        một hiện tượng không thể bỏ qua.
+      </p>
+      <p>
+        Dự án này kéo dài trong suốt 4 năm, kết thúc vào năm 2020 sau 205
+        chương, nhưng đã để lại một dấu ấn sâu sắc trong lòng người đọc. Không
+        chỉ gây ấn tượng mạnh mẽ với nội dung kịch tính, mà còn nhờ vào việc xây
+        dựng các nhân vật hết sức đặc biệt. Câu chuyện xoay quanh Tanjiro
+        Kamado, một cậu bé trẻ tuổi với trái tim trong sáng và đầy quyết tâm,
+        người duy nhất trong gia đình bị giết chết bởi những con quái vật "quỷ".
+        Tanjiro sau đó trở thành một thợ săn quỷ, để trả thù cho gia đình và tìm
+        cách cứu em gái của mình, Nezuko, người đã bị biến thành quỷ.
+      </p>
+      <p>
+        Ngoài câu chuyện đầy cảm động và ý nghĩa về tình anh em, tình bạn và
+        lòng kiên trì, Kimetsu no Yaiba còn nổi bật với các trận chiến mãn nhãn
+        và kỹ thuật vẽ đặc sắc của Gotouge Koyoharu. Các cuộc chiến đấu giữa các
+        thợ săn quỷ và quỷ là những màn đối đầu đầy kịch tính, khiến người xem
+        không thể rời mắt. Đặc biệt, phần hoạt hình được sản xuất bởi Ufotable
+        với đồ họa xuất sắc và những cảnh hành động đầy ấn tượng đã góp phần tạo
+        nên sức hút lớn cho bộ anime này.
+      </p>
+      <p>
+        Không chỉ thành công về mặt manga và anime, Demon Slayer còn trở thành
+        một hiện tượng toàn cầu với doanh thu khổng lồ và vô số giải thưởng. Bộ
+        phim điện ảnh Demon Slayer: Mugen Train ra mắt vào năm 2020 đã phá vỡ
+        nhiều kỷ lục phòng vé, trở thành bộ phim hoạt hình có doanh thu cao nhất
+        mọi thời đại tại Nhật Bản. Thành công này đã chứng minh tầm ảnh hưởng
+        mạnh mẽ của Kimetsu no Yaiba trong nền văn hóa đại chúng hiện đại, trở
+        thành một trong những thương hiệu lớn nhất của anime trong những năm gần
+        đây.
+      </p>
+      <p>
+        Với sự kết hợp giữa các yếu tố như tình cảm gia đình, hi sinh, và hành
+        động mãn nhãn, Demon Slayer đã tạo ra một sức hút mạnh mẽ và không ngừng
+        lan rộng ra toàn cầu, ghi tên mình vào lịch sử các tác phẩm anime/manga
+        nổi bật nhất của Nhật Bản trong thế kỷ 21.
+      </p>
+
+      <h2>🔥 Cốt truyện chính</h2>
+      <p>
+        <strong>Kimetsu no Yaiba</strong> xoay quanh nhân vật chính
+        <strong>Kamado Tanjiro</strong>, một cậu bé tốt bụng và đầy lòng yêu
+        thương, sống cùng gia đình hạnh phúc trên một ngọn núi hẻo lánh. Tuy
+        nhiên, một ngày định mệnh, gia đình của Tanjiro bị sát hại một cách tàn
+        bạo bởi những con quỷ, trong khi Tanjiro vắng nhà. Khi trở về, cậu phát
+        hiện tất cả những người thân yêu của mình đã bị giết chết, và chỉ còn
+        <strong>Nezuko</strong>, em gái cậu, sống sót. Tuy nhiên, Nezuko không
+        còn là người nữa, cô đã bị biến thành một con quỷ, nhưng điều đặc biệt
+        là em vẫn giữ được một phần nhân tính và tình cảm với Tanjiro.
+      </p>
+
+      <p>
+        Với lòng quyết tâm và đau buồn khi chứng kiến em gái mình trở thành quỷ,
+        Tanjiro bắt đầu hành trình tìm cách chữa trị cho Nezuko và trả thù cho
+        cái chết của gia đình mình. Cậu gia nhập <strong>Đội Diệt Quỷ</strong>,
+        một tổ chức bí mật chuyên săn lùng và tiêu diệt quỷ, để tìm ra cách giúp
+        em gái trở lại thành người. Trong quá trình này, Tanjiro không chỉ gặp
+        gỡ nhiều đồng đội, mà còn đối đầu với những con quỷ mạnh mẽ và những thử
+        thách đầy cam go.
+      </p>
+
+      <p>
+        Một trong những mục tiêu quan trọng của Tanjiro là
+        <strong>Muzan Kibutsuji</strong>, thủ lĩnh tối cao của loài quỷ và cũng
+        là kẻ đứng sau việc biến Nezuko thành quỷ. Muzan là một tên quỷ cực kỳ
+        mạnh mẽ, với tham vọng tạo ra một thế giới chỉ toàn quỷ, và chính hắn là
+        nguồn gốc của tất cả các con quỷ trên thế giới. Để có thể bảo vệ em gái
+        và tiêu diệt Muzan, Tanjiro phải vượt qua những trận chiến khốc liệt,
+        học hỏi các kỹ năng chiến đấu từ những thợ săn quỷ đi trước, và dần dần
+        trưởng thành qua mỗi thử thách.
+      </p>
+
+      <p>
+        Câu chuyện không chỉ là cuộc hành trình của Tanjiro để cứu em gái mà còn
+        là hành trình của tình yêu thương, sự hy sinh, và lòng dũng cảm. Mặc dù
+        đối mặt với rất nhiều khó khăn và đau thương, Tanjiro không bao giờ từ
+        bỏ, và chính sự kiên cường này đã khiến câu chuyện
+        <strong>Kimetsu no Yaiba</strong> trở thành một biểu tượng của sức mạnh
+        tinh thần và tình thân gia đình trong thế giới anime và manga.
+      </p>
+
+      <h2>💥 Điểm nổi bật</h2>
+      <p>
+        <strong>Cốt truyện cảm động với tình cảm gia đình sâu sắc</strong> là
+        một trong những yếu tố làm nên sức hấp dẫn của
+        <strong>Kimetsu no Yaiba</strong>. Câu chuyện không chỉ tập trung vào
+        cuộc chiến giữa con người và quỷ mà còn khai thác sâu sắc tình cảm gia
+        đình, tình yêu thương giữa anh em, đặc biệt là mối quan hệ giữa
+        <strong>Tanjiro</strong> và em gái <strong>Nezuko</strong>. Mặc dù
+        Nezuko đã trở thành quỷ, nhưng tình cảm mà cô dành cho Tanjiro không hề
+        thay đổi, và ngược lại, Tanjiro luôn kiên trì bảo vệ em gái mình dù phải
+        đối mặt với muôn vàn nguy hiểm. Chính tình yêu thương này là động lực
+        lớn nhất giúp Tanjiro không bao giờ từ bỏ và tiếp tục cuộc hành trình
+        của mình.
+      </p>
+
+      <p>
+        <strong>Hình ảnh và hoạt họa đỉnh cao</strong> của
+        <strong>Kimetsu no Yaiba</strong> là một yếu tố không thể không nhắc đến
+        khi nói về sự thành công của bộ anime này. Được thực hiện bởi
+        <strong>studio Ufotable</strong>, nổi tiếng với kỹ thuật hoạt họa chất
+        lượng cao, các trận chiến trong anime không chỉ mãn nhãn mà còn mang lại
+        cảm giác chân thật và kịch tính. Mỗi chiêu thức, mỗi chuyển động của các
+        nhân vật đều được vẽ tỉ mỉ, tạo nên những cảnh tượng đỉnh cao về mặt thị
+        giác, khiến người xem không thể rời mắt khỏi màn hình.
+      </p>
+
+      <p>
+        <strong>Âm nhạc tuyệt vời</strong> là một trong những điểm mạnh giúp
+        nâng tầm bộ anime này. Những bản nhạc nền đầy cảm xúc và những bài hát
+        mở đầu nổi tiếng như <em>Gurenge</em> của LiSA đã trở thành biểu tượng
+        không thể thiếu khi nhắc đến <strong>Kimetsu no Yaiba</strong>. Âm nhạc
+        trong anime không chỉ giúp khắc họa cảm xúc nhân vật mà còn làm nổi bật
+        các tình huống căng thẳng và đầy kịch tính, khiến mỗi cảnh quay trở nên
+        sống động và đáng nhớ hơn bao giờ hết.
+      </p>
+
+      <p>
+        <strong>Dàn nhân vật cá tính và có chiều sâu tâm lý rõ rệt</strong> là
+        yếu tố quan trọng giúp <strong>Kimetsu no Yaiba</strong> chiếm trọn tình
+        cảm của người xem. Mỗi nhân vật trong câu chuyện đều có câu chuyện
+        riêng, với những nỗi đau, ước mơ và khát vọng khác nhau. Từ
+        <strong>Tanjiro</strong>, <strong>Nezuko</strong> đến các thợ săn quỷ
+        như <strong>Zenitsu</strong> và <strong>Inosuke</strong>, mỗi người đều
+        có những đặc điểm cá tính đặc biệt, và những mối quan hệ giữa họ dần
+        được phát triển một cách tinh tế qua từng tập phim. Điều này giúp tạo
+        nên một thế giới phong phú, không chỉ có các trận chiến mà còn có sự
+        trưởng thành của các nhân vật và tình bạn gắn bó giữa họ.
+      </p>
+    </section>
+
+    <section class="characters">
+      <h2>Nhân Vật Chính</h2>
+      <div class="character-grid">
+        <div class="character-card">
+          <img
+            src="https://i.pinimg.com/736x/cd/d9/cf/cdd9cf543e7ebf400eb560474fe34415.jpg"
+            alt="Tanjiro"
+          />
+          <h3>Kamado Tanjiro</h3>
+          <p>
+            Một chàng trai hiền lành, kiên cường. Anh trở thành Thợ Săn Quỷ sau
+            khi gia đình bị sát hại bởi lũ quỷ. Sở hữu hơi thở Mặt Trời hiếm có,
+            anh chiến đấu để chữa trị cho em gái.
+          </p>
+        </div>
+        <div class="character-card">
+          <img
+            src="https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/Kamado_Nezuko_0_1_1_a7af44d90b.jpg"
+            alt="Nezuko"
+          />
+          <h3>Kamado Nezuko</h3>
+          <p>
+            Em gái của Tanjiro. Dù bị biến thành quỷ, Nezuko vẫn giữ được phần
+            lớn nhân tính và luôn chiến đấu bên cạnh anh trai để bảo vệ con
+            người.
+          </p>
+        </div>
+        <div class="character-card">
+          <img
+            src="https://thuvientutien.com/wp-content/uploads/2024/12/Agatsuma-Zenitsu.jpg"
+            alt="Zenitsu"
+          />
+          <h3>Agatsuma Zenitsu</h3>
+          <p>
+            Một chiến binh nhút nhát, thường xuyên sợ hãi. Tuy nhiên, khi rơi
+            vào trạng thái vô thức, anh trở nên cực kỳ mạnh mẽ với kỹ năng Hơi
+            Thở Sấm Sét.
+          </p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
